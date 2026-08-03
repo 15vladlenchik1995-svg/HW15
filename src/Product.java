@@ -1,37 +1,41 @@
 
-import java.util.Arrays;
-import java.util.Objects;
-
-// Класс товара
-class Product {
+public class Product {
     private int id;
     private String name;
-    private int price;
+    private double price;
     private String category;
 
-    public Product(int id, String name, int price, String category) {
+    public Product(int id, String name, double price, String category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.category = category;
     }
 
-    // Геттеры
+
     public int getId() { return id; }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
     public String getCategory() { return category; }
 
     @Override
     public String toString() {
-        return "Товар[артикул=" + id + ", название=" + name + ", цена=" + price + ", категория=" + category + "]";
+        return "Product{id=" + id + ", name='" + name + "', price=" + price + ", category='" + category + "'}";
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Product)) return false;
+        Product other = (Product) obj;
+        return this.id == other.id && this.category.equals(other.category);
+    }
 
+    @Override
+    public int hashCode() {
 
-        return this.id == product.id && Objects.equals(this.category, product.category);
+        int result = Integer.hashCode(id);
+        result = 31 * result + category.hashCode();
+        return result;
     }
 }

@@ -1,63 +1,52 @@
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 
-class Order {
+public class Order {
     private String customer;
-    private Product[] basket;
+    private List<Product> basket;
 
-    public Order(String customer, Product[] basket) {
+    public Order(String customer, List<Product> basket) {
         this.customer = customer;
-
-        this.basket = basket != null ? Arrays.copyOf(basket, basket.length) : null;
+        this.basket = basket;
     }
+
+    public String getCustomer() { return customer; }
+    public List<Product> getBasket() { return basket; }
 
     @Override
     public String toString() {
-
-        return "Заказ[клиент=" + customer + ", корзина=" + Arrays.toString(basket) + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order{customer='").append(customer).append("', basket=[");
+        for (int i = 0; i < basket.size(); i++) {
+            sb.append(basket.get(i));
+            if (i < basket.size() - 1) sb.append(", ");
+        }
+        sb.append("]}");
+        return sb.toString();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Order order = (Order) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Order)) return false;
+        Order other = (Order) obj;
+
+        if (!this.customer.equals(other.customer)) return false;
+
+        if (this.basket.size() != other.basket.size()) return false;
 
 
-        if (!Objects.equals(this.customer, order.customer)) {
-            return false;
-        }
-
-
-        if (this.basket == null && order.basket == null) {
-            return true;
-        }
-        if (this.basket == null || order.basket == null) {
-            return false;
-        }
-
-
-        if (this.basket.length != order.basket.length) {
-            return false;
-        }
-
-        for (int i = 0; i < this.basket.length; i++) {
-            Product p1 = this.basket[i];
-            Product p2 = order.basket[i];
-
-
-            if (p1 == null) {
-                if (p2 != null) return false;
-                continue;
-            } else {
-
-                if (!p1.equals(p2)) {
-                    return false;
-                }
+        for (int i = 0; i < this.basket.size(); i++) {
+            if (!this.basket.get(i).equals(other.basket.get(i))) {
+                return false;
             }
         }
-
         return true;
     }
-}
 
+    @Override
+    public int hashCode() {
+        int result = customer.hashCode();
+        result = 31 * result + basket.hashCode(); // hashCode списка учитывает порядок и hashCode элементов
+        return result;
+    }
+}
